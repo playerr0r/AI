@@ -6,10 +6,11 @@
 # Размер доски
 N = 8
 # Координаты клеток, вырезанных из доски
-ex = [[1,2], [3,4], [7,7]]
+ex = [[4, 1], [6, 7], [2, 1], [1, 0], [6, 4], [0, 3], [5, 4], [4, 5], [0, 4], [6, 6], [4, 6], [3, 4], [4, 0], [7, 4], [7, 5], [2, 3], [1, 6], [3, 7], [4, 2], [5, 6], [5, 3], [5, 1], [1, 5], [7, 0], [0, 5], [1, 4], [5, 0], [5, 2], [6, 1], [4, 3], [7, 4]]
+
 # Координаты начальной и конечной клеток
-sx, sy = 1, 0
-fx, fy = 1, 3
+sx, sy = 0, 0
+fx, fy = 5, 5
 
 # Проверка, находится ли клетка в списке вырезанных
 def isExcluded(x, y):
@@ -65,14 +66,8 @@ def findPathDepthLimited():
                 queue.append([x + dx, y + dy])
                 # Запоминаем, откуда можно попасть в эту клетку
                 parents[(y + dy) * N + (x + dx)] = [x, y]
-        print(queue)
+        # print(visited)
     return None
-
-
-
-
-
-
 
 
 # поиск пути с помощью оптимального алгоритма перебора А*
@@ -121,7 +116,7 @@ def findPathAStar():
                 f[y * N + x] = g[y * N + x] + h[y * N + x]
         # Сортируем список доступных клеток по расстоянию от начальной до конечной
         queue.sort(key=lambda i: f[i[1] * N + i[0]])
-        print(visited)
+        # print(visited)
     return None
 
 
@@ -157,7 +152,7 @@ def findPathBFS():
                 queue.append([x + dx, y + dy])
                 # Запоминаем клетку, из которой можно попасть в текущую
                 parents[(y + dy) * N + x + dx] = [x, y]
-        print(visited)
+        # print(visited)
     return None
 
 
@@ -171,6 +166,12 @@ def printPath(path):
                 print('O', end=' ')
             # Если клетка доступна
             elif isAccessible(j, i):
+                # Если клетка является конечной
+                if isFinal(j, i):
+                    print('F', end=' ')
+                # Если клетка является начальной
+                elif [j, i] == [sx, sy]:
+                    print('S', end=' ')
                 # Если клетка входит в путь
                 if [j, i] in path:
                     print('X', end=' ')
@@ -178,10 +179,6 @@ def printPath(path):
                     print('.', end=' ')
         print()
     print()
-
-
-
-
 
 
 printPath(path = findPathDepthLimited())
